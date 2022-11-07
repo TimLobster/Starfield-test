@@ -34,12 +34,15 @@
             let alpha = random(0.5, 1);
             let size = 8;
             let colour = getRndColor();
+            let test = Math.floor(Math.random() * 2);
 
             starsArray.push({
                 xPos,
                 yPos,
                 alpha,
-                colour
+                colour,
+                scrollRate: test === 1 ? 8 : 4,
+                size: test === 1 ? 8 : 6,
             });
 
             if (!started) {
@@ -65,11 +68,11 @@
                         }
 
                         ctx.globalAlpha = star.alpha;
-                        ctx.fillRect(star.xPos, star.yPos, size, size);
+                        ctx.fillRect(star.xPos, star.yPos, star.size, star.size);
                     });
 
                     starsArray = starsArray.forEach(star => {
-                        star.xPos += size;
+                        star.xPos += star.scrollRate;
 
                         if (star.xPos >= canvas.width) {
                             star.xPos = 0;
