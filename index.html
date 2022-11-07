@@ -34,15 +34,15 @@
             let alpha = random(0.5, 1);
             let size = 8;
             let colour = getRndColor();
-            let test = Math.floor(Math.random() * 2);
+            let priority = Math.floor(Math.random() * 2);
 
             starsArray.push({
                 xPos,
                 yPos,
                 alpha,
                 colour,
-                scrollRate: test === 1 ? 8 : 4,
-                size: test === 1 ? 8 : 6,
+                scrollRate: priority === 1 ? 8 : 4,
+                size: priority === 1 ? 8 : 6,
             });
 
             if (!started) {
@@ -71,14 +71,13 @@
                         ctx.fillRect(star.xPos, star.yPos, star.size, star.size);
                     });
 
-                    starsArray = starsArray.forEach(star => {
+                    starsArray.forEach(star => {
                         star.xPos += star.scrollRate;
 
                         if (star.xPos >= canvas.width) {
                             star.xPos = 0;
                         }
-                    })
-                        .filter(star => star < canvas.width);                    
+                    });                    
                 }, 50)
             }
         }
