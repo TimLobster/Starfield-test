@@ -1,27 +1,21 @@
 <canvas class="canvas"></canvas>
 
-<script lang="js">
-    function random(min, max) {
-        return min + Math.random() * (max + 1 - min);
-    }
-
+<script>
     const canvas = document.querySelector('.canvas');
     const ctx = canvas.getContext("2d");
-
-    let starsArray = [];
-    let started = false;
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    function random(min, max) {
-        return min + Math.random() * (max + 1 - min);
-    }
+    let starsArray = [];
+    let started = false;
 
+    // Remake the field if window is resized
     window.addEventListener('resize', function() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        //Re-add the stars
+
+        // Re-add the stars
         stars();
     });
 
@@ -31,53 +25,58 @@
         const starsFraction = canvasSize / 20000;
 
         for(let i = 0; i < starsFraction; i++) {
-            //Set up random elements
+            // Set up random elements and assign them to the starsArray
             let xPos = random(2, canvas.width - 2);
             let yPos = random(2, canvas.height - 2);
             let alpha = random(0.5, 1);
             let size = 8;
             let colour = getRndColor();
 
-            starsArray.push([
+            starsArray.push({
                 xPos,
                 yPos,
                 alpha,
                 colour
-            ]);
+            });
 
             if (!started) {
                 started = true;
                 setInterval(() => {
-                    // console.log(Math.floor(Math.random() * 2));
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    starsArray.forEach(x => {
+                    starsArray.forEach(star => {
+                        // Add glow effect
                         ctx.shadowBlur = 10;
-                        ctx.shadowColor = x[3];
-                        ctx.fillStyle = x[3];
+                        ctx.shadowColor = star.colour;
+                        ctx.fillStyle = star.colour;
 
-                        if (x[2] >= 0) {
-                            x[2] -= 0.1;
-                        }
+                        if (star.alpha > 0) {
+                            star.alpha -= 0.1;
 
-                        if (x[2] <= 0.25) {
-                            if (Math.floor(Math.random() * 100) === 1) {
-                                x[2] = 1;
+                            if (star.alpha < 0) {
+                                star.alpha = 0;
                             }
                         }
 
-                        ctx.globalAlpha = x[2];
-                        ctx.fillRect(x[0], x[1], size, size);
+                        // Twinkle logic
+                        if (star.alpha <= 0.25) {
+                            if (Math.floor(Math.random() * 10) === 1) {
+                                star.alpha = 1;
+                            }
+                        }
+
+                        ctx.globalAlpha = star.alpha;
+                        ctx.fillRect(star.xPos, star.yPos, size, size);
                     });
 
-                    starsArray = starsArray.forEach(x => {
-                        x[0] += size;
+                    starsArray = starsArray.forEach(star => {
+                        star.xPos += size;
 
-                        if (x[0] >= canvas.width) {
-                            x[0] = 0;
+                        if (star.xPos >= canvas.width) {
+                            star.xPos = 0;
                         }
                     })
-                        .filter(x => x < canvas.width);                    
+                        .filter(star => star < canvas.width);                    
                 }, 50)
             }
         }
@@ -89,8 +88,12 @@
             b = 255*Math.random()|0;
         return 'rgb(' + r + ',' + g + ',' + b + ')';
     }
+    
+    function random(min, max) {
+        return min + Math.random() * (max + 1 - min);
+    }
 
-    //Add the stars
+    // Add the stars
     stars();
 </script>
 
