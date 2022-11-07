@@ -15,6 +15,9 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        starsArray = [];
+
         // Re-add the stars
         stars();
     });
@@ -52,10 +55,8 @@
 
                         if (star.alpha > 0) {
                             star.alpha -= 0.1;
-
-                            if (star.alpha < 0) {
-                                star.alpha = 0;
-                            }
+                        } else {
+                            star.alpha = 0;
                         }
 
                         // Twinkle logic
