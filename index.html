@@ -52,10 +52,8 @@
 
                         if (star.alpha > 0) {
                             star.alpha -= 0.1;
-
-                            if (star.alpha < 0) {
-                                star.alpha = 0;
-                            }
+                        } else {
+                            star.alpha = 0;
                         }
 
                         // Twinkle logic
